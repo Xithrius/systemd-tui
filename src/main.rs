@@ -1,19 +1,39 @@
-#![warn(clippy::nursery, clippy::pedantic)]
-#![allow(clippy::module_name_repetitions, clippy::future_not_send)]
+use std::io;
 
-use color_eyre::eyre::{Error, Result, WrapErr};
+use tui::prelude::*;
 
-mod handlers;
-mod utils;
+mod app;
+mod event;
+mod handler;
+mod ui;
 
-use crate::handlers::config::CompleteConfig;
+use crate::{
+    app::{App, AppResult},
+    event::{Event, EventHandler},
+    handler::handle_key_events,
+    ui::Ui,
+};
 
-fn main() -> Result<(), Error> {
-    color_eyre::install().unwrap();
+fn main() -> AppResult<()> {
+    let mut app = App::new();
 
-    let mut _config = CompleteConfig::new()
-        .wrap_err("Unable to read configuration file.")
-        .unwrap();
+    let backend = CrosstermBackend::new(io::stderr());
+    let terminal = Terminal::new(backend)?;
+    let events = EventHandler::new(250);
+    let mut ui = Ui::new(terminal, events);
+    ui.init()?;
 
-    std::process::exit(0)
+    while app.running {
+        ui.draw(&mut app)?;
+
+        match ui.events.next()? {
+            Event::Tick => app.tick(),
+            Event::Key(key_event) => handle_key_events(key_event, &mut app)?,
+            Event::Mouse(_) => {}
+            Event::Resize(_, _) => {}
+        }
+    }
+
+    ui.exit()?;
+    Ok(())
 }

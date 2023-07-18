@@ -1,11 +1,20 @@
 [package]
-name = "rust-binary-project-template"
+name = "systemd-tui"
 version = "0.1.0"
+authors = ["Xithrius <xithrius@gmail.com>"]
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+rust-version = "1.61.0"
+description = "Monitor systemd services in a TUI."
+documentation = "https://github.com/Xithrius/systemd-tui"
+homepage = "https://github.com/Xithrius/systemd-tui"
+repository = "https://github.com/Xithrius/systemd-tui"
+license = "MIT OR Apache-2.0"
+keywords = ["tui", "systemd"]
+categories = ["command-line-utilities"]
 
 [dependencies]
+crossterm = "0.26.1"
+tui = { package = "ratatui", version = "0.22.0", default-features = false, features = [ "crossterm", "serde" ] }
 serde = { version = "1.0.152", features = [ "derive" ] }
 toml = "0.7.2"
 color-eyre = "0.6.1"
@@ -16,7 +25,7 @@ opt-level = 3
 [[bin]]
 bench = false
 path = "src/main.rs"
-name = "rust-binary-project-template"
+name = "sui"
 
 [profile.release]
 lto = "thin"

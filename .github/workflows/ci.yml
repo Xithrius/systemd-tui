@@ -15,14 +15,8 @@ jobs:
 
       matrix:
         include:
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-
-          - os: macos-latest
-            target: x86_64-apple-darwin
 
     name: Build & Test (${{ matrix.target }})
     runs-on: ${{ matrix.os }}
@@ -99,7 +93,7 @@ jobs:
       - name: Upload a Build Artifact
         if: always() && steps.prepare-artifact.outcome == 'success'
         continue-on-error: true
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: pull-request-payload
           path: pull_request_payload.json
