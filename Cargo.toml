@@ -13,7 +13,7 @@ keywords = ["tui", "systemd"]
 categories = ["command-line-utilities"]
 
 [dependencies]
-crossterm = "0.26.1"
+crossterm = "0.27.0"
 tui = { package = "ratatui", version = "0.22.0", default-features = false, features = [ "crossterm", "serde" ] }
 serde = { version = "1.0.152", features = [ "derive" ] }
 toml = "0.7.2"
